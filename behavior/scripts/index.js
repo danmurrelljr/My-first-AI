@@ -1,7 +1,6 @@
 'use strict'
 
 exports.handle = function handle(client) {
-
   const sayHello = client.createStep({
     satisfied() {
       return Boolean(client.getConversationState().helloSent)
@@ -30,41 +29,37 @@ exports.handle = function handle(client) {
       client.done()
     }
   })
-  
+
   const handleGreeting = client.createStep({
-	  satisfied() {
-	  	return false
-	  },
-	  
-	  prompt() {
-	  	client.addTextResponse('Hello world, err, I mean, human')
-		  client.done()
-	  }
+    satisfied() {
+      return false
+    },
+
+    prompt() {
+      client.addTextResponse('Hello world, I mean human')
+      client.done()
+    }
   })
-  
+
   const handleGoodbye = client.createStep({
-	  satisfied() {
-	  	return false
-	  },
-	  
-	  prompt() {
-	  	client.addTextResponse('See you later!')
-		  client.done()
-	  }
+    satisfied() {
+      return false
+    },
+
+    prompt() {
+      client.addTextResponse('See you later!')
+      client.done()
+    }
   })
 
   client.runFlow({
     classifications: {
-			// map inbound message classifications to names of streams
-		goodbye: 'goodbye',
-		greeting: 'greeting',
-    },
-    autoResponses: {
-      // configure responses to be automatically sent as predicted by the machine learning model
+      goodbye: 'goodbye',
+      greeting: 'greeting'
     },
     streams: {
-		goodbye: handleGoodbye,
-		greeting: handleGreeting,
+      goodbye: handleGoodbye,
+      greeting: handleGreeting,
       main: 'onboarding',
       onboarding: [sayHello],
       end: [untrained]
